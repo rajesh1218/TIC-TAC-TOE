@@ -1,11 +1,11 @@
-name: Build,Analyze,scan
+name: Deploy
 on:
   push:
     branches:
       - main
 jobs:
-  build-analyze-scan:
-    name: Build
+  deploy:
+    name: Deploy
     runs-on: [Eks githubactions-eks rja]
     steps:
       - name: Checkout code
