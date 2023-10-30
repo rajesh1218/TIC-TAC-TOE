@@ -5,7 +5,7 @@ on:
     branches:
       - main
 
-
+# job steps we need specify
 jobs:
   build-analyze-scan:
     name: Build
