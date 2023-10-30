@@ -38,4 +38,16 @@ jobs:
           DOCKER_CLI_ACI: 1 
 
       - name: trivy file scan
-        run: trivy image rajesh1218/tic-tak-toy:latest > truvyimagescan.txt    
+        run: trivy image rajesh1218/tic-tak-toy:latest > truvyimagescan.txt   
+  deploy:
+   needs: build-analyze-scan
+   runs-on: [Eks githubactions-eks rja]
+   steps:
+      - name: pull docker image
+        run: docker pull rajesh1218/tic-tak-toy:latest
+
+      - name: trivy image scan
+        run: trivy image rajesh1218/tic-tak-toy:latest > truvydeployimagescan.txt
+
+      - name: deploy to container  
+        run: docker run --name ticgame -p 3000:3000 rajesh1218/tic-tak-toy:latest
