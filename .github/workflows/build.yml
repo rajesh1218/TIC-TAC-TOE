@@ -3,44 +3,11 @@ name: Build,Analyze,scan
 on:
   push:
     branches:
-      - main
+      - 1.0.0
 
 # job steps we need specify
 jobs:
-  build-analyze-scan:
-    name: Build
-    runs-on: [Eks githubactions-eks rja]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-
-      - name: Build and analyze with SonarQube
-        uses: sonarsource/sonarqube-scan-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          
-      - name: npm install dependcies
-        run: npm install
-        
-      - name: trivy file scan
-        run: trivy fs . > truvyfs.txt
-
-      - name: docker build and push
-        run: |
-          docker build -t tic-tak-toy .
-          docker tag tic-tak-toy rajesh1218/tic-tak-toy:latest
-          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-          docker push rajesh1218/tic-tak-toy:latest
-        env:
-          DOCKER_CLI_ACI: 1 
-
-      - name: trivy file scan
-        run: trivy image rajesh1218/tic-tak-toy:latest > truvyimagescan.txt   
   deploy:
-   needs: build-analyze-scan
    runs-on: [Eks githubactions-eks rja]
    steps:
       - name: pull docker image
