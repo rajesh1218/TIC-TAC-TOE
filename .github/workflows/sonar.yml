@@ -27,3 +27,12 @@ jobs:
         
       - name: trivy file scan
         run: trivy fs . > truvyfs.txt
+
+      - name: docker build and push
+        run: |
+          docker build -t tic-tak-toy .
+          docker tag tic-tak-toy rajesh1218/tic-tak-toy:latest
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+          docker push rajesh1218/tic-tak-toy:latest
+        env:
+          DOCKER_CLI_ACI: 1  
