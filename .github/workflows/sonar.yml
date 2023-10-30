@@ -9,7 +9,7 @@ on:
 jobs:
   build-analyze-scan:
     name: Build
-    runs-on: [rja ]
+    runs-on: [Eks githubactions-eks rja]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
